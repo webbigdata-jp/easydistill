@@ -28,7 +28,7 @@ We have a series of technical articles on the functionalities of EasyDistill.
 
 1. Clone the repository:
     ```bash
-    git clone <repository-url>
+    git clone https://github.com/modelscope/easydistill
     cd EasyDistill
     ```
 
