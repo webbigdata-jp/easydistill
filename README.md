@@ -168,8 +168,9 @@ All the datasets are publicly available in HuggingFace and ModelScope.
 
 ## Reference
 
-We have [an arxiv paper](https://arxiv.org/abs/2505.20888) for you to cite for the EasyDistill library. Below are other papers related to our project.
+We have [an arxiv paper](https://arxiv.org/abs/2505.20888) for you to cite for the EasyDistill library. Below are papers related to our project.
 
+- Chengyu Wang, Junbing Yan, Wenrui Cai, Yuanhao Yue, Jun Huang. EasyDistill: A Comprehensive Toolkit for Effective Knowledge Distillation of Large Language Models. arXiv preprint
 - Wenrui Cai, Chengyu Wang, Junbing Yan, Jun Huang, Xiangzhong Fang. Reasoning with OmniThought: A Large CoT Dataset with Verbosity and Cognitive Difficulty Annotations. arXiv preprint
 - Wenrui Cai, Chengyu Wang, Junbing Yan, Jun Huang, Xiangzhong Fang. Training Small Reasoning LLMs with Cognitive Preference Alignment. arXiv preprint
 - Chengyu Wang, Junbing Yan, Yuanhao Yue, Jun Huang. DistilQwen2.5: Industrial Practices of Training Distilled Open Lightweight Language Models. **ACL 2025**
