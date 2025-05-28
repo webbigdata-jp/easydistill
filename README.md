@@ -168,7 +168,7 @@ All the datasets are publicly available in HuggingFace and ModelScope.
 
 ## Reference
 
-We have [an arxiv paper](TBD) for you to cite for the EasyDistill library. Below are other papers related to our project.
+We have [an arxiv paper](https://arxiv.org/abs/2505.20888) for you to cite for the EasyDistill library. Below are other papers related to our project.
 
 - Wenrui Cai, Chengyu Wang, Junbing Yan, Jun Huang, Xiangzhong Fang. Reasoning with OmniThought: A Large CoT Dataset with Verbosity and Cognitive Difficulty Annotations. arXiv preprint
 - Wenrui Cai, Chengyu Wang, Junbing Yan, Jun Huang, Xiangzhong Fang. Training Small Reasoning LLMs with Cognitive Preference Alignment. arXiv preprint
