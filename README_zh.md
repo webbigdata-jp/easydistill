@@ -6,11 +6,11 @@
 
 </div>
 
-Introducing **EasyDistill**, a pioneering toolkit on knowledge distillation (KD) for large language models (LLMs). With the growing complexity and size of LLMs, **EasyDistill** offers a versatile and user-friendly platform to streamline the KD process, supporting both black-box and white-box methodologies. It facilitates efficient model training, enabling smaller models to emulate the performance of larger ones without compromising accuracy. **EasyDistill** boasts an extensive range of features, including data synthesis, supervised fine-tuning, ranking optimization, and reinforcement learning, all tailored for various KD scenarios. Designed to accommodate both System 1 (fast, intuitive) and System 2 (slow, analytical) cognitive models, the toolkit is modular and easy to use, with a simple command-line interface guiding users. Beyond academic exploration, **EasyDistill** anchors practical industrial solutions, offering robust distilled models and open-source datasets, while also showcasing seamless integration with Alibaba Cloud’s AI platform, PAI. Committed to bridging theoretical advancements with practical needs, **EasyDistill** empowers the NLP community, making state-of-the-art KD strategies accessible to researchers and industry practitioners alike. 
+**EasyDistill** 是一个专为大语言模型（LLMs）知识蒸馏（KD）而设计的开创性工具包。随着大语言模型复杂性和规模的不断增长，**EasyDistill** 提供了一个多功能且用户友好的平台来简化知识蒸馏过程，支持黑盒和白盒两种方法。它促进高效的模型训练，使较小的模型能够在不损失准确性的情况下模拟较大模型的性能。**EasyDistill** 拥有广泛的功能特性，包括数据合成、监督微调、排序优化和强化学习，所有这些都针对各种知识蒸馏场景进行了定制。该工具包设计用于适应系统1（快速、直觉）和系统2（缓慢、分析）认知模型，具有模块化和易于使用的特点，配备简单的命令行界面来指导用户。除了学术探索之外，**EasyDistill** 还锚定实际的工业解决方案，提供强大的蒸馏模型和开源数据集，同时展示与阿里云AI平台PAI的无缝集成。致力于连接理论进步与实际需求，**EasyDistill** 赋能NLP社区，使最先进的知识蒸馏策略对研究人员和行业从业者都变得可及。
 
-# Technical Articles
+# 技术文章
 
-We have a series of technical articles on the functionalities of EasyDistill.
+我们有一系列关于EasyDistill功能的技术文章。
 
 - [人工智能平台 PAI DistilQwen2.5-DS3-0324发布：知识蒸馏+快思考=更高效解决推理难题](https://developer.aliyun.com/article/1661734)
 - [DistilQwen2.5-R1发布：知识蒸馏助推小模型深度思考](https://developer.aliyun.com/article/1659288)
@@ -20,35 +20,35 @@ We have a series of technical articles on the functionalities of EasyDistill.
 
 
 
-## Overview
+## 概述
 
 ![EasyDistill Framework](resources/framework.png)
 
-- **Toolkit Features**: EasyDistill provides versatile functionalities, including data synthesis, supervised fine-tuning, logits distillation, ranking optimization, and reinforcement learning techniques tailored for KD scenarios.
-- **Compatibility**: It supports both System 1 (fast, intuitive) and System 2 (slow, analytical) models.
-- **User-Friendly**: With its modular design and simple command-line interface, EasyDistill makes experimentation and implementation of KD strategies straightforward.
-- **Industrial Integration**: Incorporates KD-based solutions and supports integration with platforms such as Alibaba Cloud’s Platform for AI (PAI).
+- **工具包特性**：EasyDistill提供多功能性，包括数据合成、监督微调、logits蒸馏、排序优化和针对知识蒸馏场景定制的强化学习技术。
+- **兼容性**：支持系统1（快速、直觉）和系统2（缓慢、分析）模型。
+- **用户友好**：凭借其模块化设计和简单的命令行界面，EasyDistill使知识蒸馏策略的实验和实现变得简单直接。
+- **工业集成**：整合基于知识蒸馏的解决方案，支持与阿里云人工智能平台（PAI）等平台的集成。
 
 
-## Getting Started
+## 快速开始
 
-1. Clone the repository:
+1. 克隆仓库：
     ```bash
     git clone https://github.com/modelscope/easydistill
     cd EasyDistill
     ```
 
-2. Install the required dependencies:
+2. 安装所需依赖：
     ```bash
     python setup.py install
     ```
 
-3. Explore the usage of EasyDistill through the command-line interface:
+3. 通过命令行界面探索EasyDistill的使用：
     ```bash
     easydistill --config <config-file-path>
     ```
 
-    The config file expresses the detailed settings of any knowledge distillation jobs that **EasyDistill** supports. A sample of black-box distillation config can be shown below:
+    配置文件表达了**EasyDistill**支持的任何知识蒸馏作业的详细设置。黑盒蒸馏配置示例如下所示：
     ```json
     {
         "job_type": "kd_black_box_local",
@@ -88,14 +88,14 @@ We have a series of technical articles on the functionalities of EasyDistill.
     }
     ```
 
-## DistilQWen Series
+## DistilQwen系列
 
-The **DistilQwen** models represent a robust suite of distilled language models derived from the **EasyDistill** toolkit. Designed to capitalize on the principles of knowledge distillation, DistilQwen models offer a significant reduction in model size while maintaining high performance, making them ideal for resource-constrained environments. Whether you're aiming for efficient deployment in industrial scenarios or seeking to explore advanced KD methodologies, **DistilQwen** models are poised to meet diverse application needs with agility and precision.
+**DistilQwen**模型代表了从**EasyDistill**工具包衍生的强大蒸馏语言模型套件。基于知识蒸馏原理设计，DistilQwen模型在保持高性能的同时显著减少了模型大小，使其非常适合资源受限的环境。无论您是希望在工业场景中高效部署，还是寻求探索先进的知识蒸馏方法，**DistilQwen**模型都准备好以敏捷性和精确性满足多样化的应用需求。
 
 
-### What's New: Adaptive Thinking Models
+### 最新进展：自适应思维模型
 
-The most recent **DistilQwen** series is **DistilQwen-ThoughtX**, which exhibits improved reasoning abilities and generates CoTs with more optimal lengths compared to its predecessors. This model series is developed from the innovative **OmniThought** dataset by utilizing the novel Reasoning Verbosity (RV) and Cognitive Difficulty (CD) scores, which ensure that models receive rich, high-quality training data reflecting optimal CoT output length and difficulty. **DistilQwen-ThoughtX** outperforms other KD models in the open-source community. The performance of **DistilQwen-ThoughtX** is shown below.
+最新的**DistilQwen**系列是**DistilQwen-ThoughtX**，与其前身相比，它展现出改进的推理能力并生成更优长度的思维链（CoTs）。该模型系列是通过利用新颖的推理冗余度（RV）和认知难度（CD）评分从创新的**OmniThought**数据集开发而来，这些评分确保模型接收到反映最优CoT输出长度和难度的丰富、高质量训练数据。**DistilQwen-ThoughtX**在开源社区中超越了其他知识蒸馏模型。**DistilQwen-ThoughtX**的性能如下所示。
 
 
 | **Model**                                     | **AIME2024** | **MATH500** | **GPQA-D** | **LCB V2** | **Avg.**  |
@@ -112,11 +112,11 @@ The most recent **DistilQwen** series is **DistilQwen-ThoughtX**, which exhibits
 | s1.1-32B                                      | 59.3         | 87.4        | 62.0       | 58.7       | 66.8      |
 | **DistilQwen-ThoughtX-32B**                   | **80.0**     | **92.6**    | _64.0_     | **73.4**   | **77.5**  |
 
-The **OmniThought** datasets are also publicly available. Refer to the Datasets section.
+**OmniThought**数据集也已公开发布。请参考数据集部分。
 
-### System 1 Models
+### 系统1模型
 
-**DistilQwen2** is an enhanced version of the Qwen2 models, equipped with improved instruction-following capabilities for various NLP tasks. We employ GPT-4 and Qwen-max as teacher models to generate high-quality responses, with the balance on the task distributions of input instructions. Following SFT, a rank optimization process is performed using the DPO algorithm to enhance alignment between the student models and the teacher models. **DistilQwen2.5** models are trained using a combination of black-box and white-box KD algorithms. We adhere to the same instruction data processing and black-box SFT procedure as employed in the production of **DistilQwen2**. Subsequently, white-box training is applied to refine the students' acquisition of intricate knowledge from the teacher models, specifically utilizing Qwen2.5-72B-Instruct as open-source teacher models. The performance of **DistilQwen2** and **DistilQwen2.5** is shown below.
+**DistilQwen2**是Qwen2模型的增强版本，配备了针对各种NLP任务的改进指令跟随能力。我们使用GPT-4和Qwen-max作为教师模型来生成高质量响应，平衡输入指令的任务分布。在监督微调（SFT）之后，使用DPO算法执行排序优化过程，以增强学生模型与教师模型之间的对齐。**DistilQwen2.5**模型使用黑盒和白盒知识蒸馏算法的组合进行训练。我们遵循与**DistilQwen2**生产中采用的相同指令数据处理和黑盒SFT程序。随后，应用白盒训练来完善学生从教师模型获取复杂知识的能力，特别是利用Qwen2.5-72B-Instruct作为开源教师模型。**DistilQwen2**和**DistilQwen2.5**的性能如下所示。
 
 | **Model**                          | **AlpacaEval 2.0 (length control)** | **MT-Bench** | **MT-Bench (single)** | **IFEval (instruct-loose)** | **IFEval (strict-prompt)** |
 |------------------------------------|-------------------------------------|--------------|-----------------------|-----------------------------|----------------------------|
@@ -134,12 +134,12 @@ The **OmniThought** datasets are also publicly available. Refer to the Datasets 
 | **DistilQwen2.5-7B-Instruct**      | **34.86**                           | **8.76**     | **9.22**              | **83.48**                   | **73.27**                  |
 
 
-We have released two instruction following datasets to public. Refer to the Datasets section.
+我们已向公众发布了两个指令跟随数据集。请参考数据集部分。
 
 
-### System 2 Models
+### 系统2模型
 
-The **DistilQwen2.5-R1** model series utilizes DeepSeek-R1 as the teacher model. To align the reasoning abilities of smaller distilled models with their intrinsic cognitive capacities, the models are further refined using our CogPO algorithm, which outperforms other training methods. Additionally, we transfer the fast-thinking reasoning capabilities from DeepSeek-V3-0324 to the **DistilQwen2.5-DS3-0324** models. To shorten the reasoning process, the CoT simplification operator are employed to reduce the number of tokens in the training data for **DistilQwen2.5-R1**. Combined with a rewritten dataset comprising DeepSeek-V3-0324's CoT distillation data, we develop the **DistilQwen2.5-DS3-0324** models. The performance of **DistilQwen2.5-R1** and **DistilQwen2.5-DS3-0324** is shown below.
+**DistilQwen2.5-R1**模型系列利用DeepSeek-R1作为教师模型。为了将较小蒸馏模型的推理能力与其内在认知能力对齐，模型使用我们的CogPO算法进一步完善，该算法优于其他训练方法。此外，我们将DeepSeek-V3-0324的快速思维推理能力转移到**DistilQwen2.5-DS3-0324**模型中。为了缩短推理过程，采用CoT简化操作符来减少**DistilQwen2.5-R1**训练数据中的token数量。结合包含DeepSeek-V3-0324的CoT蒸馏数据的重写数据集，我们开发了**DistilQwen2.5-DS3-0324**模型。**DistilQwen2.5-R1**和**DistilQwen2.5-DS3-0324**的性能如下所示。
 
 | **Model**                             | **AIME2024** | **MATH-500** | **GPQA Diamond** | **LiveCodeBench V2** |
 |---------------------------------------|--------------|--------------|------------------|----------------------|
@@ -155,27 +155,27 @@ The **DistilQwen2.5-R1** model series utilizes DeepSeek-R1 as the teacher model.
 | **DistilQwen2.5-32B-R1**              | **46.67**    | **87.0**     | **48.99**        | **55.97**            |
 | **DistilQwen2.5-DS3-0324-32B**        | **70.00**    | **93.8**     | **62.12**        | **65.95**            |
 
-All the **DistilQwen** models are publicly available in HuggingFace and ModelScope.
+所有**DistilQwen**模型都在HuggingFace和ModelScope上公开发布。
 
-## Released Datasets
+## 发布的数据集
 
-We have also released several datasets based on the **EasyDistill** framework.
+我们还基于**EasyDistill**框架发布了几个数据集。
 
-### Instruction Following Datasets
+### 指令跟随数据集
 
-To assist community developers in avoiding catastrophic forgetting when fine-tuning the **DistilQwen** model, we have open-sourced two datasets: **DistilQwen_100K** and **DistilQwen_1M**. These datasets are intended to provide a solid foundation for model fine-tuning, enhancing adaptability to new tasks while retaining performance on previous tasks. Additionally, it can be utilized to improve instruction-following capabilities when fine-tuning other similar large language models. These datasets cover a range of contents, including mathematics, code, knowledge-based Q&A, instruction following, and creative generation, with a total dataset size of 100K and 1M entries. Users can integrate **DistilQwen_100K** and **DistilQwen_1M**, or its subsets, with their own data during model fine-tuning to ensure excellent downstream task performance while maintaining the model's general capabilities, thus preserving its ability to generalize.
-
-
-### Chain-of-Thought Reasoning Datasets
-
-**OmniThought** is a large-scale dataset featuring **2 million** Chain-of-Thought (CoT) processes generated and validated by DeepSeek-R1 and QwQ-32B. Each CoT process in **OmniThought** is annotated with novel Reasoning Verbosity (RV) and Cognitive Difficulty (CD) scores, which describe the appropriateness of CoT verbosity and cognitive difficulty level for models to comprehend these reasoning processes. Based on our **OmniThought** dataset, we further train and release a series of high-performing models (**DistilQwen-ThoughtX-7B** and **DistilQwen-ThoughtX-32B**), specifically equipped with stronger reasoning abilities and optimal CoT output length and difficulty level. Refer to `recipes/open_datasets` for details.
-
-All the datasets are publicly available in HuggingFace and ModelScope.
+为了帮助社区开发者在微调**DistilQwen**模型时避免灾难性遗忘，我们开源了两个数据集：**DistilQwen_100K**和**DistilQwen_1M**。这些数据集旨在为模型微调提供坚实的基础，增强对新任务的适应性，同时保持在先前任务上的性能。此外，它还可以用于在微调其他类似的大语言模型时改善指令跟随能力。这些数据集涵盖了广泛的内容，包括数学、代码、基于知识的问答、指令跟随和创意生成，总数据集大小分别为100K和1M条目。用户可以在模型微调期间将**DistilQwen_100K**和**DistilQwen_1M**或其子集与自己的数据集成，以确保出色的下游任务性能，同时保持模型的通用能力，从而保持其泛化能力。
 
 
-## Reference
+### 思维链推理数据集
 
-We have [an arxiv paper](https://arxiv.org/abs/2505.20888) for you to cite for the EasyDistill library. Below are papers related to our project.
+**OmniThought**是一个大规模数据集，包含由DeepSeek-R1和QwQ-32B生成和验证的**200万**个思维链（CoT）过程。**OmniThought**中的每个CoT过程都用新颖的推理冗余度（RV）和认知难度（CD）评分进行标注，这些评分描述了CoT冗余度的适当性和模型理解这些推理过程的认知难度水平。基于我们的**OmniThought**数据集，我们进一步训练并发布了一系列高性能模型（**DistilQwen-ThoughtX-7B**和**DistilQwen-ThoughtX-32B**），特别配备了更强的推理能力和最优的CoT输出长度和难度水平。详情请参考`recipes/open_datasets`。
+
+所有数据集都在HuggingFace和ModelScope上公开发布。
+
+
+## 参考文献
+
+我们有[一篇arxiv论文](https://arxiv.org/abs/2505.20888)供您引用EasyDistill库。以下是与我们项目相关的论文。
 
 - Chengyu Wang, Junbing Yan, Wenrui Cai, Yuanhao Yue, Jun Huang. EasyDistill: A Comprehensive Toolkit for Effective Knowledge Distillation of Large Language Models. arXiv preprint
 - Wenrui Cai, Chengyu Wang, Junbing Yan, Jun Huang, Xiangzhong Fang. Reasoning with OmniThought: A Large CoT Dataset with Verbosity and Cognitive Difficulty Annotations. arXiv preprint
@@ -185,11 +185,11 @@ We have [an arxiv paper](https://arxiv.org/abs/2505.20888) for you to cite for t
 - Yuanhao Yue, Chengyu Wang, Jun Huang, Peng Wang. Distilling Instruction-following Abilities of Large Language Models with Task-aware Curriculum Planning. **EMNLP 2024**
 
 
-## License
+## 许可证
 
-This project is licensed under the [Apache License (Version 2.0)](LICENSE). This toolkit also contains some code modified from other repos under other open-source licenses. See the [NOTICE](NOTICE) file for more information.
+本项目采用[Apache许可证（版本2.0）](LICENSE)授权。该工具包还包含一些从其他仓库修改的代码，这些代码采用其他开源许可证。更多信息请参见[NOTICE](NOTICE)文件。
 
 
-## Join in the Discussion
+## 参与讨论
 
-We welcome community partners to collaborate and contribute to the development, and welcome to join the DingTalk group: 117440002081 to participate in the discussion.
+我们欢迎社区伙伴协作并为开发做出贡献，欢迎加入钉钉群：117440002081 参与讨论。
