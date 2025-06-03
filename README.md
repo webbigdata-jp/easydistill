@@ -12,6 +12,8 @@ Introducing **EasyDistill**, a pioneering toolkit on knowledge distillation (KD)
 
 We have a series of technical articles on the functionalities of EasyDistill.
 
+- [DistilQwen-ThoughtX：变长思维链推理模型，能力超越DeepSeek蒸馏模型](https://developer.aliyun.com/article/1665220)
+- [阿里云人工智能平台 PAI 开源 EasyDistill 框架助力大语言模型轻松瘦身](https://developer.aliyun.com/article/1664823)
 - [人工智能平台 PAI DistilQwen2.5-DS3-0324发布：知识蒸馏+快思考=更高效解决推理难题](https://developer.aliyun.com/article/1661734)
 - [DistilQwen2.5-R1发布：知识蒸馏助推小模型深度思考](https://developer.aliyun.com/article/1659288)
 - [DistilQwen2.5发布：通义千问蒸馏小模型再升级](https://developer.aliyun.com/article/1653842)
