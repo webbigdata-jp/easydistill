@@ -105,7 +105,7 @@ python dpo_student_infer_only.py --config=distilqwen2_stage2.json
 Next, we run the training job by:
 
 ```bash
-python easydistill/kd/train.py --config=distilqwen2_stage2.json
+python easydistill/rank/train.py --config=distilqwen2_stage2.json
 ```
 
 Again, please refer to the config file `distilqwen2_stage2.json` in the current folder. Remember to change the configurations when needed. If you need to run the job in a distributed mode, use `accelerate` to run the job.
