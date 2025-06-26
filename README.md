@@ -182,9 +182,16 @@ To assist community developers in avoiding catastrophic forgetting when fine-tun
 
 ### Chain-of-Thought Reasoning Datasets
 
-**OmniThought** is a large-scale dataset featuring **2 million** Chain-of-Thought (CoT) processes generated and validated by DeepSeek-R1 and QwQ-32B. Each CoT process in **OmniThought** is annotated with novel Reasoning Verbosity (RV) and Cognitive Difficulty (CD) scores, which describe the appropriateness of CoT verbosity and cognitive difficulty level for models to comprehend these reasoning processes. Based on our **OmniThought** dataset, we further train and release a series of high-performing models (**DistilQwen-ThoughtX-7B** and **DistilQwen-ThoughtX-32B**), specifically equipped with stronger reasoning abilities and optimal CoT output length and difficulty level. Refer to `recipes/open_datasets` for details.
+**OmniThought** is a large-scale dataset featuring **2 million** Chain-of-Thought (CoT) processes generated and validated by DeepSeek-R1 and QwQ-32B. Each CoT process in **OmniThought** is annotated with novel Reasoning Verbosity (RV) and Cognitive Difficulty (CD) scores, which describe the appropriateness of CoT verbosity and cognitive difficulty level for models to comprehend these reasoning processes. Based on our **OmniThought** dataset, we further train and release a series of high-performing models (**DistilQwen-ThoughtX-7B** and **DistilQwen-ThoughtX-32B**), specifically equipped with stronger reasoning abilities and optimal CoT output length and difficulty level. Refer to `recipes/open_datasets` for details. In addition, **OmniThought-0528** is an extension to **OmniThought** featuring **365 thousand** Chain-of-Thought (CoT) processes generated and validated by DeepSeek-R1-0528. 
 
 All the datasets are publicly available in HuggingFace and ModelScope.
+
+| **Dataset**       | **Size**  | **Download**                                                      |
+|-------------------|-----------|-------------------------------------------------------------------|
+| DistilQwen_100K   | 100K      | [HF](https://huggingface.co/datasets/alibaba-pai/DistilQwen_100k) |
+| DistilQwen_1M     | 1M        | [HF](https://huggingface.co/datasets/alibaba-pai/DistilQwen_1M)   |
+| OmniThought       | 2M        | [HF](https://huggingface.co/datasets/alibaba-pai/OmniThought)     |
+| OmniThought-0528  | 365K      | [HF](https://huggingface.co/datasets/alibaba-pai/OmniThought-0528)|
 
 
 ## Reference
