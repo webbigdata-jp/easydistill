@@ -8,6 +8,12 @@
 
 Introducing **EasyDistill**, a pioneering toolkit on knowledge distillation (KD) for large language models (LLMs). With the growing complexity and size of LLMs, **EasyDistill** offers a versatile and user-friendly platform to streamline the KD process, supporting both black-box and white-box methodologies. It facilitates efficient model training, enabling smaller models to emulate the performance of larger ones without compromising accuracy. **EasyDistill** boasts an extensive range of features, including data synthesis, supervised fine-tuning, ranking optimization, and reinforcement learning, all tailored for various KD scenarios. Designed to accommodate both System 1 (fast, intuitive) and System 2 (slow, analytical) cognitive models, the toolkit is modular and easy to use, with a simple command-line interface guiding users. Beyond academic exploration, **EasyDistill** anchors practical industrial solutions, offering robust distilled models and open-source datasets, while also showcasing seamless integration with Alibaba Cloud’s AI platform, PAI. Committed to bridging theoretical advancements with practical needs, **EasyDistill** empowers the NLP community, making state-of-the-art KD strategies accessible to researchers and industry practitioners alike. 
 
+
+# News
+
+- June 25th: We have released a new series of DistilQWen models named DistilQwen-ThoughtY, togeter with OmniThought-0528 (CoTs distilled from DeepSeek-R1-0528).
+
+
 # Technical Articles
 
 We have a series of technical articles on the functionalities of EasyDistill.
