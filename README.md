@@ -126,20 +126,20 @@ The **OmniThought** datasets are also publicly available. Refer to the Datasets 
 
 **DistilQwen2** is an enhanced version of the Qwen2 models, equipped with improved instruction-following capabilities for various NLP tasks. We employ GPT-4 and Qwen-max as teacher models to generate high-quality responses, with the balance on the task distributions of input instructions. Following SFT, a rank optimization process is performed using the DPO algorithm to enhance alignment between the student models and the teacher models. **DistilQwen2.5** models are trained using a combination of black-box and white-box KD algorithms. We adhere to the same instruction data processing and black-box SFT procedure as employed in the production of **DistilQwen2**. Subsequently, white-box training is applied to refine the students' acquisition of intricate knowledge from the teacher models, specifically utilizing Qwen2.5-72B-Instruct as open-source teacher models. The performance of **DistilQwen2** and **DistilQwen2.5** is shown below.
 
-| **Model**                          | **AlpacaEval 2.0 (length control)** | **MT-Bench** | **MT-Bench (single)** | **IFEval (instruct-loose)** | **IFEval (strict-prompt)** |
-|------------------------------------|-------------------------------------|--------------|-----------------------|-----------------------------|----------------------------|
-| Qwen2.5-0.5B-Instruct              | 2.46                                | 5.49         | 6.26                  | 42.81                       | 30.31                      |
-| **DistilQwen2.5-0.5B-Instruct**    | **4.89**                            | **5.78**     | **6.83**              | **52.61**                   | **37.82**                  |
-| Qwen2-1.5B-Instruct                | 5.22                                | 5.85         | 6.45                  | 41.37                       | 28.10                      |
-| **DistilQwen2-1.5B-Instruct**      | **8.28**                            | **6.42**     | **7.12**              | **49.76**                   | **36.04**                  |
-| Qwen2.5-1.5B-Instruct              | 6.69                                | 7.09         | 7.66                  | 55.40                       | 40.11                      |
-| **DistilQwen2.5-1.5B-Instruct**    | **13.69**                           | **7.35**     | **7.99**              | **61.10**                   | **74.49**                  |
-| Qwen2.5-3B-Instruct                | 17.98                               | 7.92         | 8.40                  | 61.18                       | 74.58                      |
-| **DistilQwen2.5-3B-Instruct**      | **20.91**                           | **8.37**     | **8.97**              | **67.03**                   | **77.36**                  |
-| Qwen2-7B-Instruct                  | 24.33                               | 8.27         | 8.68                  | 66.67                       | 52.31                      |
-| **DistilQwen2-7B-Instruct**        | **25.35**                           | **8.40**     | **9.03**              | **71.46**                   | **60.26**                  |
-| Qwen2.5-7B-Instruct                | 31.43                               | 8.52         | 8.83                  | 81.53                       | 72.10                      |
-| **DistilQwen2.5-7B-Instruct**      | **34.86**                           | **8.76**     | **9.22**              | **83.48**                   | **73.27**                  |
+| **Model**                          | **AlpacaEval 2.0 (length control)** | **MT-Bench** | **MT-Bench (single)** | **IFEval (instruct-loose)** | **IFEval (strict-prompt)** | **Download** |
+|------------------------------------|-------------------------------------|--------------|-----------------------|-----------------------------|----------------------------|--------------|
+| Qwen2.5-0.5B-Instruct              | 2.46                                | 5.49         | 6.26                  | 42.81                       | 30.31                      |              |
+| **DistilQwen2.5-0.5B-Instruct**    | **4.89**                            | **5.78**     | **6.83**              | **52.61**                   | **37.82**                  |[HF](https://huggingface.co/alibaba-pai/DistilQwen2.5-0.5B-Instruct)|
+| Qwen2-1.5B-Instruct                | 5.22                                | 5.85         | 6.45                  | 41.37                       | 28.10                      |              |
+| **DistilQwen2-1.5B-Instruct**      | **8.28**                            | **6.42**     | **7.12**              | **49.76**                   | **36.04**                  |[HF](https://huggingface.co/alibaba-pai/DistilQwen2-1.5B-Instruct)|
+| Qwen2.5-1.5B-Instruct              | 6.69                                | 7.09         | 7.66                  | 55.40                       | 40.11                      |              |
+| **DistilQwen2.5-1.5B-Instruct**    | **13.69**                           | **7.35**     | **7.99**              | **61.10**                   | **74.49**                  |[HF](https://huggingface.co/alibaba-pai/DistilQwen2.5-1.5B-Instruct)|
+| Qwen2.5-3B-Instruct                | 17.98                               | 7.92         | 8.40                  | 61.18                       | 74.58                      |              |
+| **DistilQwen2.5-3B-Instruct**      | **20.91**                           | **8.37**     | **8.97**              | **67.03**                   | **77.36**                  |[HF](https://huggingface.co/alibaba-pai/DistilQwen2.5-3B-Instruct)|
+| Qwen2-7B-Instruct                  | 24.33                               | 8.27         | 8.68                  | 66.67                       | 52.31                      |              |
+| **DistilQwen2-7B-Instruct**        | **25.35**                           | **8.40**     | **9.03**              | **71.46**                   | **60.26**                  |[HF](https://huggingface.co/alibaba-pai/DistilQwen2.5-7B-Instruct)|
+| Qwen2.5-7B-Instruct                | 31.43                               | 8.52         | 8.83                  | 81.53                       | 72.10                      |              |
+| **DistilQwen2.5-7B-Instruct**      | **34.86**                           | **8.76**     | **9.22**              | **83.48**                   | **73.27**                  |[HF](https://huggingface.co/alibaba-pai/DistilQwen2.5-7B-Instruct)|
 
 
 We have released two instruction following datasets to public. Refer to the Datasets section.
@@ -149,21 +149,24 @@ We have released two instruction following datasets to public. Refer to the Data
 
 The **DistilQwen2.5-R1** model series utilizes DeepSeek-R1 as the teacher model. To align the reasoning abilities of smaller distilled models with their intrinsic cognitive capacities, the models are further refined using our CogPO algorithm, which outperforms other training methods. Additionally, we transfer the fast-thinking reasoning capabilities from DeepSeek-V3-0324 to the **DistilQwen2.5-DS3-0324** models. To shorten the reasoning process, the CoT simplification operator are employed to reduce the number of tokens in the training data for **DistilQwen2.5-R1**. Combined with a rewritten dataset comprising DeepSeek-V3-0324's CoT distillation data, we develop the **DistilQwen2.5-DS3-0324** models. The performance of **DistilQwen2.5-R1** and **DistilQwen2.5-DS3-0324** is shown below.
 
-| **Model**                             | **AIME2024** | **MATH-500** | **GPQA Diamond** | **LiveCodeBench V2** |
-|---------------------------------------|--------------|--------------|------------------|----------------------|
-| Qwen2.5-3B-Instruct                   | 6.67         | 62.6         | 32.83            | 11.35                |
-| **DistilQwen2.5-DS3-0324-3B**         | **16.67**    | **70.0**     | **34.34**        | **18.00**            |
-| Qwen2.5-7B-Instruct                   | 10.0         | 73.6         | 33.30            | 30.72                |
-| **DistilQwen2.5-7B-R1**               | **23.33**    | **77.8**     | **37.88**        | **36.40**            |
-| **DistilQwen2.5-DS3-0324-7B**         | **43.33**    | **88.4**     | **42.93**        | **46.38**            |
-| Qwen2.5-14B-Instruct                  | 16.7         | 78.2         | 43.43            | 37.38                |
-| **DistilQwen2.5-14B-R1**              | **26.67**    | **82.6**     | **45.45**        | **41.49**            |
-| **DistilQwen2.5-DS3-0324-14B**        | **46.67**    | **90.8**     | **51.52**        | **54.40**            |
-| Qwen2.5-32B-Instruct                  | 16.67        | 81.4         | 45.50            | 47.36                |
-| **DistilQwen2.5-32B-R1**              | **46.67**    | **87.0**     | **48.99**        | **55.97**            |
-| **DistilQwen2.5-DS3-0324-32B**        | **70.00**    | **93.8**     | **62.12**        | **65.95**            |
+| **Model**                             | **AIME2024** | **MATH-500** | **GPQA Diamond** | **LiveCodeBench V2** | **Download** |
+|---------------------------------------|--------------|--------------|------------------|----------------------|--------------|
+| Qwen2.5-3B-Instruct                   | 6.67         | 62.6         | 32.83            | 11.35                |              |
+| **DistilQwen2.5-DS3-0324-3B**         | **16.67**    | **70.0**     | **34.34**        | **18.00**            |[HF](https://huggingface.co/alibaba-pai/DistilQwen2.5-DS3-0324-3B)|
+| Qwen2.5-7B-Instruct                   | 10.0         | 73.6         | 33.30            | 30.72                |              |
+| **DistilQwen2.5-7B-R1**               | **23.33**    | **77.8**     | **37.88**        | **36.40**            |[HF](https://huggingface.co/alibaba-pai/DistilQwen2.5-R1-7B)|
+| **DistilQwen2.5-DS3-0324-7B**         | **43.33**    | **88.4**     | **42.93**        | **46.38**            |[HF](https://huggingface.co/alibaba-pai/DistilQwen2.5-DS3-0324-7B)|
+| Qwen2.5-14B-Instruct                  | 16.7         | 78.2         | 43.43            | 37.38                |              |
+| **DistilQwen2.5-14B-R1**              | **26.67**    | **82.6**     | **45.45**        | **41.49**            |[HF](https://huggingface.co/alibaba-pai/DistilQwen2.5-R1-14B)|
+| **DistilQwen2.5-DS3-0324-14B**        | **46.67**    | **90.8**     | **51.52**        | **54.40**            |[HF](https://huggingface.co/alibaba-pai/DistilQwen2.5-DS3-0324-14B)|
+| Qwen2.5-32B-Instruct                  | 16.67        | 81.4         | 45.50            | 47.36                |              |
+| **DistilQwen2.5-32B-R1**              | **46.67**    | **87.0**     | **48.99**        | **55.97**            |[HF](https://huggingface.co/alibaba-pai/DistilQwen2.5-R1-32B)|
+| **DistilQwen2.5-DS3-0324-32B**        | **70.00**    | **93.8**     | **62.12**        | **65.95**            |[HF](https://huggingface.co/alibaba-pai/DistilQwen2.5-DS3-0324-32B)|
 
 All the **DistilQwen** models are publicly available in HuggingFace and ModelScope.
+
+
+
 
 ## Released Datasets
 
