@@ -103,7 +103,7 @@ The **DistilQwen** models represent a robust suite of distilled language models 
 
 ### What's New: Adaptive Thinking Models
 
-The most recent **DistilQwen** series is **DistilQwen-ThoughtX**, which exhibits improved reasoning abilities and generates CoTs with more optimal lengths compared to its predecessors. This model series is developed from the innovative **OmniThought** dataset by utilizing the novel Reasoning Verbosity (RV) and Cognitive Difficulty (CD) scores, which ensure that models receive rich, high-quality training data reflecting optimal CoT output length and difficulty. **DistilQwen-ThoughtX** outperforms other KD models in the open-source community. The performance of **DistilQwen-ThoughtX** is shown below.
+The most recent **DistilQwen** series is **DistilQwen-ThoughtX** and **DistilQwen-ThoughtY**,, which exhibits improved reasoning abilities and generates CoTs with more optimal lengths compared to its predecessors. The **DistilQwen-ThoughtX** model series is developed from the innovative **OmniThought** dataset by utilizing the novel Reasoning Verbosity (RV) and Cognitive Difficulty (CD) scores, which ensure that models receive rich, high-quality training data reflecting optimal CoT output length and difficulty. **DistilQwen-ThoughtY** is further trained based on Qwen3 as student models and DeepSeek-R1-0528 as the teacher model. The performance of **DistilQwen-ThoughtX** and **DistilQwen-ThoughtY** is shown below.
 
 
 | **Model**                                     | **AIME2024** | **MATH500** | **GPQA-D** | **LCB V2** | **Avg.**  |
@@ -120,7 +120,7 @@ The most recent **DistilQwen** series is **DistilQwen-ThoughtX**, which exhibits
 | s1.1-32B                                      | 59.3         | 87.4        | 62.0       | 58.7       | 66.8      |
 | **DistilQwen-ThoughtX-32B**                   | **80.0**     | **92.6**    | _64.0_     | **73.4**   | **77.5**  |
 
-The **OmniThought** datasets are also publicly available. Refer to the Datasets section.
+The **OmniThought** and **OmniThought-0528** datasets are also publicly available. Refer to the Datasets section.
 
 ### System 1 Models
 
