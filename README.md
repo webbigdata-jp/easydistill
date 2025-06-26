@@ -186,12 +186,12 @@ To assist community developers in avoiding catastrophic forgetting when fine-tun
 
 All the datasets are publicly available in HuggingFace and ModelScope.
 
-| **Dataset**       | **Size**  | **Download**                                                      |
-|-------------------|-----------|-------------------------------------------------------------------|
-| DistilQwen_100K   | 100K      | [HF](https://huggingface.co/datasets/alibaba-pai/DistilQwen_100k) |
-| DistilQwen_1M     | 1M        | [HF](https://huggingface.co/datasets/alibaba-pai/DistilQwen_1M)   |
-| OmniThought       | 2M        | [HF](https://huggingface.co/datasets/alibaba-pai/OmniThought)     |
-| OmniThought-0528  | 365K      | [HF](https://huggingface.co/datasets/alibaba-pai/OmniThought-0528)|
+| **Dataset**       | **Size**  | **Download**                                                                                                                  |
+|-------------------|-----------|-------------------------------------------------------------------------------------------------------------------------------|
+| DistilQwen_100K   | 100K      | [HF](https://huggingface.co/datasets/alibaba-pai/DistilQwen_100k) & [MS](https://modelscope.cn/datasets/PAI/DistilQwen_100k)  |
+| DistilQwen_1M     | 1M        | [HF](https://huggingface.co/datasets/alibaba-pai/DistilQwen_1M) & [MS](https://modelscope.cn/datasets/PAI/DistilQwen_1M)      |
+| OmniThought       | 2M        | [HF](https://huggingface.co/datasets/alibaba-pai/OmniThought) & [MS](https://modelscope.cn/datasets/PAI/OmniThought)          |
+| OmniThought-0528  | 365K      | [HF](https://huggingface.co/datasets/alibaba-pai/OmniThought-0528) & [MS](https://modelscope.cn/datasets/PAI/OmniThought-0528)|
 
 
 ## Reference
