@@ -108,20 +108,20 @@ The most recent **DistilQwen** series is **DistilQwen-ThoughtX** and **DistilQwe
 
 | **Model**                                     | **AIME2024** | **MATH500** | **GPQA-D** | **LCB V2** | **Avg.**  | **Download** |
 |-----------------------------------------------|--------------|-------------|------------|------------|-----------|--------------|
-| **DistillQwen-ThoughtY-4B**                   | **76.7**     | **95.2**    | **56.1**   | **75.8**   | **76.0**  |[HF](https://huggingface.co/alibaba-pai/DistilQwen-ThoughtY-4B)|
+| **DistillQwen-ThoughtY-4B**                   | **76.7**     | **95.2**    | **56.1**   | **75.8**   | **76.0**  |[HF](https://huggingface.co/alibaba-pai/DistilQwen-ThoughtY-4B) & [MS](https://modelscope.cn/models/PAI/DistillQwen-ThoughtY-4B)|
 | OpenThinker-7B                                | 31.3         | 83.0        | 42.4       | 39.9       | 49.1      |              |
 | DeepSeek-R1-Distill-Qwen-7B                   | 57.3         | 89.6        | 47.3       | 48.4       | 60.6      |              |
 | OpenThinker2-7B                               | 50.0         | 88.4        | 49.3       | 55.6       | 60.8      |              |
-| **DistilQwen-ThoughtX-7B**                    | 56.7         | 90.2        | 50.0       | 56.8       | 63.4      |[HF](https://huggingface.co/alibaba-pai/DistilQwen-ThoughtX-7B)|
-| **DistillQwen-ThoughtY-8B**                   | **76.7**     | **94.6**    | **62.1**   | **78.1**   | **77.9**  |[HF](https://huggingface.co/alibaba-pai/DistilQwen-ThoughtY-8B)|
+| **DistilQwen-ThoughtX-7B**                    | 56.7         | 90.2        | 50.0       | 56.8       | 63.4      |[HF](https://huggingface.co/alibaba-pai/DistilQwen-ThoughtX-7B) & [MS](https://modelscope.cn/models/pai/DistilQwen-ThoughtX-7B)|
+| **DistillQwen-ThoughtY-8B**                   | **76.7**     | **94.6**    | **62.1**   | **78.1**   | **77.9**  |[HF](https://huggingface.co/alibaba-pai/DistilQwen-ThoughtY-8B) & [MS](https://modelscope.cn/models/PAI/DistillQwen-ThoughtY-8B)|
 | LIMO-32B                                      | 56.7         | 86.6        | 58.1       | 60.0       | 65.3      |              |
 | OpenThinker-32B                               | 66.0         | 90.6        | 61.6       | 68.9       | 71.7      |              |
 | DeepSeek-R1-Distill-Qwen-32B                  | 74.7         | 90.0        | 62.4       | 72.3       | 74.8      |              |
 | OpenThinker2-32B                              | 76.7         | 90.8        | **64.1**   | 72.5       | 76.0      |              |
 | Light-R1-32B                                  | 74.7         | 90.4        | 62.0       | 56.0       | 70.7      |              |
 | s1.1-32B                                      | 59.3         | 87.4        | 62.0       | 58.7       | 66.8      |              |
-| **DistilQwen-ThoughtX-32B**                   | 80.0         | 92.6        | 64.0       | 73.4       | 77.5      |[HF](https://huggingface.co/alibaba-pai/DistilQwen-ThoughtX-32B)|
-| **DistillQwen-ThoughtY-32B**                  | **90.0**     | **95.2**    | 63.6	      | **76.3**   | **81.3**  |[HF](https://huggingface.co/alibaba-pai/DistilQwen-ThoughtY-32B)|
+| **DistilQwen-ThoughtX-32B**                   | 80.0         | 92.6        | 64.0       | 73.4       | 77.5      |[HF](https://huggingface.co/alibaba-pai/DistilQwen-ThoughtX-32B) & [MS](https://modelscope.cn/models/pai/DistilQwen-ThoughtX-32B)|
+| **DistillQwen-ThoughtY-32B**                  | **90.0**     | **95.2**    | 63.6	      | **76.3**   | **81.3**  |[HF](https://huggingface.co/alibaba-pai/DistilQwen-ThoughtY-32B) & [MS](https://modelscope.cn/models/PAI/DistillQwen-ThoughtY-32B)|
 
 The **OmniThought** and **OmniThought-0528** datasets are also publicly available. Refer to the Datasets section.
 
