@@ -16,8 +16,8 @@
       "max_new_tokens": 512
     },
     "models": {
-      "teacher": "Qwen/Qwen2.5-VL-3B-Instruct",
-      "student": "Qwen/Qwen2.5-VL-72B-Instruct"
+      "teacher": "Qwen/Qwen2.5-VL-72B-Instruct",
+      "student": "Qwen/Qwen2.5-VL-3B-Instruct"
     },
     "training": {
       "output_dir": "./result/",
