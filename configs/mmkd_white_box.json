@@ -1,8 +1,8 @@
 {
     "job_type": "mmkd_white_box",
     "dataset": {
-      "instruction_path": "/mnt/workspace/yyh/easydistill/test_data/mllm_demo_reformat.json",
-      "labeled_path": "/mnt/data/yyh/easydistill/test_data/mllm_demo_distill.json",
+      "instruction_path": "data/mllm_demo_reformat.json",
+      "labeled_path": "data/mllm_demo_distill.json",
       "logits_path": "./logits.json",
       "seed": 42
     },
@@ -23,8 +23,8 @@
         "distillation_type": "forward_kld"
     },
     "models": {
-      "teacher": "/mnt/data/yyh/models/Qwen2.5-VL-3B-Instruct",
-      "student": "/mnt/data/yyh/models/Qwen2.5-VL-3B-Instruct"
+      "teacher": "Qwen/Qwen2.5-VL-72B-Instruct",
+      "student": "Qwen/Qwen2.5-VL-3B-Instruct"
     },
     "training": {
       "output_dir": "./result/",
