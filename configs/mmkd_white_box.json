@@ -1,7 +1,7 @@
 {
     "job_type": "mmkd_white_box",
     "dataset": {
-      "instruction_path": "data/mllm_demo_reformat.json",
+      "instruction_path": "data/mllm_demo.json",
       "labeled_path": "data/mllm_demo_distill.json",
       "logits_path": "./logits.json",
       "seed": 42
