@@ -55,7 +55,7 @@ def load_tokenizer_and_vllm(config, eos_token=None):
     model_path = config["models"]["teacher"]
     logging.info(f"Loading processor & vLLM model from {model_path}")
 
-    # 1. 统一用 AutoProcessor（已整合 tokenizer + image_processor + video_processor）
+    # 1. Use AutoProcessor, which integrates the tokenizer, image_processor, and video_processor
     processor = AutoProcessor.from_pretrained(model_path, trust_remote_code=True)
 
     # 2. eos / pad token 处理（与官方示例保持一致，不再显式改 pad_token）
