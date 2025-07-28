@@ -11,6 +11,7 @@ Introducing **EasyDistill**, a pioneering toolkit on knowledge distillation (KD)
 
 # News
 
+- July 28th: We have released the functionalities of knowledge distillation from MLLM (aka MMKD). Refer to [Here](./easydistill/mmkd). Evaluations on the qualities of instruction-following and CoT datasets have been updated. Refer to [Here](./easydistill/eval).
 - June 25th: We have released a new series of DistilQWen models named DistilQwen-ThoughtY, togeter with OmniThought-0528 (CoTs distilled from DeepSeek-R1-0528).
 
 
