@@ -77,7 +77,7 @@ def main():
     def process_single_task(task_data: Dict[str, Any], config: Dict[str, Any]) -> bool:
         """Process a single task and return True if successful"""
         try:
-            logger.info(f"处理任务: {task_data['id']}")
+            logger.info(f"processing task: {task_data['id']}")
             run_agent(
                 prompt=task_data['question'],
                 config=config,  
