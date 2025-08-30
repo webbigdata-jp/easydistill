@@ -77,7 +77,7 @@ def first_thought_node(state: AgentState, config: RunnableConfig):
     }
 
 def reasoning_node(state: AgentState, config: RunnableConfig):
-    """思考并决定下一步行动。"""
+    """Think and decide on the next action."""
     # Create step-specific configuration
     step_config = create_step_config(config, "reasoning")
     cfg = Configuration.from_runnable_config(step_config)
