@@ -13,11 +13,7 @@ from langchain_core.pydantic_v1 import BaseModel
 from langchain_openai import ChatOpenAI
 from .mock_tools import MockTools
 from .exceptions import LLMExecutionError, CodeExecutionError, EvaluationError
-from .prompts import (
-    REACT_SYSTEM_PROMPT, REACT_USER_PROMPT, 
-    FIRST_THOUGHT_USER_PROMPT, FIRST_THOUGHT_SYSTEM_PROMPT,
-    JUDGE_ANSWER_PROMPT
-)
+from ..prompts_config import PROMPTS
 
 
 try:
@@ -75,7 +71,7 @@ def one_thought_code_step(
     previous_context="None",
     failed_experience="None"
 ):
-    thought_code_query = REACT_USER_PROMPT.format(
+    thought_code_query = PROMPTS.REACT_USER_PROMPT.format(
         query=input_query, idx=idx,
         first_thought=first_thought,
         failed_experience=failed_experience,
@@ -84,7 +80,7 @@ def one_thought_code_step(
 
     thought_code_content = call_llm_api(
         user_prompt=thought_code_query,
-        system_prompt=REACT_SYSTEM_PROMPT,
+        system_prompt=PROMPTS.REACT_SYSTEM_PROMPT,
         api_base=cfg.api_base,
         api_key=cfg.api_key,
         model_name=cfg.model_name,
@@ -115,11 +111,11 @@ def one_thought_code_step(
 
 def get_first_thought(cfg, input_query):
     """Generate the first thought prefix before the Thought-Code-Observation cycle."""
-    first_query = FIRST_THOUGHT_USER_PROMPT.format(query=input_query)
+    first_query = PROMPTS.FIRST_THOUGHT_USER_PROMPT.format(query=input_query)
 
     initial_thought = call_llm_api(
         user_prompt=first_query,
-        system_prompt=FIRST_THOUGHT_SYSTEM_PROMPT,
+        system_prompt=PROMPTS.FIRST_THOUGHT_SYSTEM_PROMPT,
         api_base=cfg.api_base,
         api_key=cfg.api_key,
         model_name=cfg.model_name,
@@ -165,7 +161,7 @@ def answer_evaluate_wo_repair(cfg, question, true_answer, generated_answer):
 def answer_evaluate(cfg, question, true_answer, generated_answer, thought_code_cycle):
     """Evaluate the correctness of the final answer."""
     # Create the evaluation prompt
-    evaluation_prompt = JUDGE_ANSWER_PROMPT.format(
+    evaluation_prompt = PROMPTS.JUDGE_ANSWER_PROMPT.format(
         question=question, true_answer=true_answer,
         generated_answer=generated_answer,
         thought_code_cycle=thought_code_cycle

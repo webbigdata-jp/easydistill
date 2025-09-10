@@ -41,17 +41,17 @@ def prepare_model_and_tokenizer(config: Dict[str, Any]) -> Tuple[AutoModelForCau
     Returns:
         Tuple of (model, tokenizer)
     """
-    model_config = config["model"]
+    model_config = config["models"]
     training_config = config["training"]
     
-    logger.info(f"Loading tokenizer from: {model_config['model_name_or_path']}")
+    logger.info(f"Loading tokenizer from: {model_config['student']}")
     tokenizer = AutoTokenizer.from_pretrained(
-        model_config["model_name_or_path"],
+        model_config["student"],
         trust_remote_code=model_config.get("trust_remote_code", True)
     )
     
     new_tokens_added = False
-    if special_tokens_to_add := model_config.get("add_special_tokens"):
+    if special_tokens_to_add := training_config.get("add_special_tokens"):
         vocab = set(tokenizer.get_vocab().keys())
         new_tokens = [token for token in special_tokens_to_add if token not in vocab]
         if new_tokens:
@@ -68,17 +68,17 @@ def prepare_model_and_tokenizer(config: Dict[str, Any]) -> Tuple[AutoModelForCau
     deepspeed_enabled = training_config.get("deepspeed") is not None
     device_map = "auto" if not deepspeed_enabled else None
     
-    logger.info(f"Loading model from: {model_config['model_name_or_path']}")
+    logger.info(f"Loading model from: {model_config['student']}")
     logger.info(f"DeepSpeed enabled: {deepspeed_enabled}, Device map: {device_map}")
     
     model = AutoModelForCausalLM.from_pretrained(
-        model_config["model_name_or_path"],
+        model_config["student"],
         trust_remote_code=model_config.get("trust_remote_code", True),
         torch_dtype=torch.bfloat16 if training_config.get("bf16", False) else torch.float32,
         device_map=device_map
     )
     
-    if model_config.get("resize_vocab", False) and new_tokens_added:
+    if training_config.get("resize_vocab", False) and new_tokens_added:
         original_size = model.get_input_embeddings().weight.size(0)
         model.resize_token_embeddings(len(tokenizer))
         logger.info(f"Resized model embeddings: {original_size} -> {len(tokenizer)}")
@@ -96,12 +96,13 @@ def load_and_prepare_dataset(config: Dict[str, Any]) -> Dataset:
         Dataset with original conversation format
     """
     dataset_config = config["dataset"]
+    training_config = config["training"]["dataset"]
     
-    logger.info(f"Loading dataset from: {dataset_config['file_name']}")
-    dataset = load_dataset("json", data_files=dataset_config["file_name"], split="train")
+    logger.info(f"Loading dataset from: {dataset_config['labeled_path']}")
+    dataset = load_dataset("json", data_files=dataset_config["labeled_path"], split="train")
     logger.info(f"Original dataset size: {len(dataset)}")
     
-    if max_samples := dataset_config.get("max_samples"):
+    if max_samples := training_config.get("max_samples"):
         if max_samples < len(dataset):
             dataset = dataset.select(range(max_samples))
             logger.info(f"Dataset truncated to {max_samples} samples")
@@ -173,9 +174,9 @@ def create_training_config(config: Dict[str, Any]) -> SFTConfig:
     Returns:
         SFTConfig object with all training parameters
     """
-    output_config = config["output"]
+    output_config = config["training"]["output"]
     training_config = config["training"]
-    dataset_config = config["dataset"]
+    dataset_config = config["training"]["dataset"]
     
     report_to_value = output_config.get("report_to", "none")
     report_to = [] if report_to_value == "none" else [report_to_value]
@@ -220,27 +221,10 @@ def validate_config(config: Dict[str, Any]) -> None:
     Raises:
         ValueError: If required keys are missing or invalid values found
     """
-    required_sections = ["model", "dataset", "training", "output"]
+    required_sections = ["models", "dataset", "training"]
     missing_sections = [section for section in required_sections if section not in config]
     if missing_sections:
         raise ValueError(f"Missing required configuration sections: {missing_sections}")
-    
-    model_required = ["model_name_or_path"]
-    model_missing = [key for key in model_required if key not in config["model"]]
-    if model_missing:
-        raise ValueError(f"Missing required model configuration: {model_missing}")
-    
-    dataset_required = ["file_name", "cutoff_len"]
-    dataset_missing = [key for key in dataset_required if key not in config["dataset"]]
-    if dataset_missing:
-        raise ValueError(f"Missing required dataset configuration: {dataset_missing}")
-    
-    dataset_file = config["dataset"]["file_name"]
-    if not os.path.exists(dataset_file):
-        raise FileNotFoundError(f"Dataset file not found: {dataset_file}")
-    
-    logger.info("Configuration validation passed")
-
 def train(config: Dict[str, Any]) -> None:
     """
     Execute complete SFT training pipeline.
@@ -282,7 +266,7 @@ def train(config: Dict[str, Any]) -> None:
         
         trainer.train(resume_from_checkpoint=resume_checkpoint)
         
-        output_dir = config["output"]["output_dir"]
+        output_dir = config["training"]["output"]["output_dir"]
         os.makedirs(output_dir, exist_ok=True)
         logger.info(f"Saving final model and tokenizer to: {output_dir}")
         trainer.save_model(output_dir)

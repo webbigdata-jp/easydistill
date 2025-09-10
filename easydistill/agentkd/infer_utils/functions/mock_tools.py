@@ -40,9 +40,9 @@ class GoogleSearch:
             raise ValueError("missing GOOGLE_API_KEY")
         
         # your search url
-        self.api_url = None
+        self.api_url = os.getenv("SEARCH_URL")
         if not self.api_url:
-            raise ValueError("missing api_url")
+            raise ValueError("missing SEARCH_URL")
     
     def search(
         self,

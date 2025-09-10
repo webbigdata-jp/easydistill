@@ -20,25 +20,37 @@ import logging
 import os
 from tqdm import tqdm
 from openai import OpenAI
-import yaml
+import json
 import concurrent.futures
 from typing import List, Dict, Any, Set
-from graph import run_agent
+from infer_utils.prompts_config import PROMPTS
+from infer_utils.graph import run_agent
+from infer_utils.train_data_conversion import conversion
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def main():
     parser = argparse.ArgumentParser(description='Run math tasks from a JSONL file')
-    parser.add_argument('--config', type=str, default='configs/data_gen_config.yaml',
-                    help='Path to the configuration file')
+    parser.add_argument('--config', type=str, help='Path to the configuration file')
     args = parser.parse_args()
 
     with open(args.config, 'r', encoding='utf-8') as f:
-        config = yaml.safe_load(f)
+        config_all = json.load(f)
+    
 
-    log_file_path_base = os.path.dirname(config["logging"]["log_file_path"])
+    data_path = config_all["dataset"]["instruction_path"]
+    config = config_all["inference"]
+
+    PROMPTS.load(config)
+
+    GOOGLE_API_KEY = config["GOOGLE_API_KEY"]
+    SEARCH_URL = config["SEARCH_URL"]
+    os.environ["GOOGLE_API_KEY"] = GOOGLE_API_KEY
+    os.environ["SEARCH_URL"] = SEARCH_URL
+
+    output_file_path_base = os.path.dirname(config_all["dataset"]["labeled_path_raw"])
     main_log_file_base = os.path.dirname(config["logging"]["main_log_file"])
-    os.makedirs(log_file_path_base, exist_ok=True)
+    os.makedirs(output_file_path_base, exist_ok=True)
     os.makedirs(main_log_file_base, exist_ok=True)
     
     logging.basicConfig(
@@ -52,15 +64,15 @@ def main():
     logger = logging.getLogger(__name__)
     logging.getLogger("httpx").setLevel(logging.WARNING)
 
-    def get_processed_ids(log_file_path: str) -> Set[str]:
+    def get_processed_ids(output_file_path: str) -> Set[str]:
         """Get a set of already processed task IDs from the log file"""
         processed_ids = set()
         
-        if not os.path.exists(log_file_path):
+        if not os.path.exists(output_file_path):
             return processed_ids
         
         try:
-            with open(log_file_path, 'r', encoding='utf-8') as f:
+            with open(output_file_path, 'r', encoding='utf-8') as f:
                 for line in f:
                     try:
                         log_entry = json.loads(line.strip())
@@ -94,10 +106,10 @@ def main():
 
     def run_math_tasks_from_file(config: Dict[str, Any]):
         """Run math tasks from a JSONL file with concurrent processing"""
-        processed_ids = get_processed_ids(config["logging"]["log_file_path"])
+        processed_ids = get_processed_ids(config_all["dataset"]["labeled_path_raw"])
         tasks_to_process: List[Dict[str, Any]] = []
         
-        with open(config["paths"]["data_file"], 'r', encoding='utf-8') as f:
+        with open(data_path, 'r', encoding='utf-8') as f:
             for line in f:
                 try:
                     task_data = json.loads(line.strip())
@@ -146,6 +158,9 @@ def main():
             logger.info(f"task complete : {completed_tasks} success, {failed_tasks} fail")
 
     run_math_tasks_from_file(config)
+
+    if os.path.exists(config_all["dataset"]["labeled_path_raw"]):
+        conversion(input_path = config_all["dataset"]["labeled_path_raw"], output_path = config_all["dataset"]["labeled_path"])
 
 if __name__ == "__main__":
     main()

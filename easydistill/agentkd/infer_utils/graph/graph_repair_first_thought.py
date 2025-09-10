@@ -10,12 +10,13 @@ from langgraph.graph import StateGraph, END
 from langchain_core.runnables import RunnableConfig
 from openai import OpenAI
 
-from functions.configuration import Configuration
-from functions import (
+from infer_utils.functions.configuration import Configuration
+from infer_utils.functions import (
     python_interpreter, answer_evaluate, call_llm_api
 )
-from functions.exceptions import LLMExecutionError, CodeExecutionError, EvaluationError, RepairError
-from functions.prompts import REACT_SYSTEM_PROMPT, REPAIR_PROMPT, REPAIR_FIRST_THOUGHT_PROMPT, FIRST_THOUGHT_SYSTEM_PROMPT
+from infer_utils.functions.exceptions import LLMExecutionError, CodeExecutionError, EvaluationError, RepairError
+from infer_utils.prompts_config import PROMPTS
+# REACT_SYSTEM_PROMPT, REPAIR_PROMPT, REPAIR_FIRST_THOUGHT_PROMPT, FIRST_THOUGHT_SYSTEM_PROMPT
 
 logger = logging.getLogger(__name__)
 
@@ -203,26 +204,26 @@ def repair_generation_node(state: AgentState, config: RunnableConfig):
                 error_step_info += f"Observation: {error_step['observation']}\n"
 
     if correction_start_step == 1: # First Thought mistake
-        repair_prompt = REPAIR_FIRST_THOUGHT_PROMPT.format(
+        PROMPTS.REPAIR_PROMPT = PROMPTS.REPAIR_FIRST_THOUGHT_PROMPT.format(
             original_query=original_query,
             failed_experience=failed_experience,
             previous_context=previous_context,
             error_step=error_step_info
         )    
-        repair_system_prompt = FIRST_THOUGHT_SYSTEM_PROMPT
+        repair_system_prompt = PROMPTS.FIRST_THOUGHT_SYSTEM_PROMPT
     else:
-        repair_prompt = REPAIR_PROMPT.format(
+        PROMPTS.REPAIR_PROMPT = PROMPTS.REPAIR_PROMPT.format(
             original_query=original_query,
             failed_experience=failed_experience,
             previous_context=previous_context,
             error_step=error_step_info
         )
-        repair_system_prompt = REACT_SYSTEM_PROMPT
+        repair_system_prompt = PROMPTS.REACT_SYSTEM_PROMPT
 
     try:
         # Call the LLM with the repair prompt using the reasoning model config
         repair_response = call_llm_api(
-            user_prompt=repair_prompt,
+            user_prompt=PROMPTS.REPAIR_PROMPT,
             system_prompt=repair_system_prompt,
             api_base=cfg.api_base,
             api_key=cfg.api_key,
@@ -559,7 +560,6 @@ builder.add_conditional_edges(
 )
 graph = builder.compile()
 
-# --- 运行入口 ---
 def run_agent_repair(prompt: str, config: dict = None, original_task_info: dict = None): 
     run_config = {"configurable": config or {}}
 

@@ -8,8 +8,8 @@ from datetime import datetime
 from langgraph.graph import StateGraph, END
 from langchain_core.runnables import RunnableConfig
 
-from functions.configuration import Configuration
-from functions import (
+from infer_utils.functions.configuration import Configuration
+from infer_utils.functions import (
     one_thought_code_step, python_interpreter,
     get_first_thought, answer_evaluate_wo_repair
 )
@@ -93,9 +93,7 @@ def reasoning_node(state: AgentState, config: RunnableConfig):
         previous_context=prompt_history
     )
 
-    # 将思考和代码都加入历史，为下一步做准备
     history_entry = f"{thought}\nCode:\n```python\n{code}\n```"
-    # 执行代码并将结果加入历史
     result = python_interpreter(code, state["python_scope"])
     observation = f"Observation: {result['output']}"
 
