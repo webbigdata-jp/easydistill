@@ -28,7 +28,7 @@ AFTERPOINTS="checkpoints/$PROJECT_NAME/$EXPERIMENT_NAME"
 TRAIN_FILES="my_data/SCoRe_math/train.parquet"
 VAL_FILES="my_data/SCoRe_math/SCoRe_val.parquet"
 
-N_GPUS_PER_NODE=4
+N_GPUS_PER_NODE=8
 
 
 python3 -m verl.trainer.main_ppo \
