@@ -1,6 +1,7 @@
 import json
 import re
 
+
 def conversion(input_path, output_path):
 
     with open(input_path, "r") as f:
@@ -33,9 +34,6 @@ def conversion(input_path, output_path):
                 continue
             
             search_item = step_item['code']
-            # if "final_answer" not in search_item:
-            #     search_item = "SEARCH: " + search_item[12:-2]
-
             conversations.append({
                 "from": "gpt",
                 "value":  f"<thought>{step_item['thought'].replace('Thought: ', '')}</thought><code>{search_item}</code>"
