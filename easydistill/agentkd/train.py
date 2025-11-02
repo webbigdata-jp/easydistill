@@ -129,7 +129,6 @@ def create_formatting_func(tokenizer: PreTrainedTokenizerBase):
             conversations_list = [conversations_list]
         
         formatted_texts = []
-        
         for conversations in conversations_list:
             try:
                 if not conversations:
@@ -184,28 +183,22 @@ def create_training_config(config: Dict[str, Any]) -> SFTConfig:
     sft_config = SFTConfig(
         output_dir=output_config["output_dir"],
         overwrite_output_dir=output_config.get("overwrite_output_dir", True),
-        
         num_train_epochs=training_config["num_train_epochs"],
         per_device_train_batch_size=training_config["per_device_train_batch_size"],
         gradient_accumulation_steps=training_config.get("gradient_accumulation_steps", 1),
         learning_rate=training_config["learning_rate"],
         lr_scheduler_type=training_config.get("lr_scheduler_type", "cosine"),
         warmup_ratio=training_config.get("warmup_ratio", 0.1),
-        
         bf16=training_config.get("bf16", False),
         dataloader_num_workers=dataset_config.get("dataloader_num_workers", 4),
-        
         logging_steps=output_config.get("logging_steps", 10),
         save_steps=output_config.get("save_steps", 500),
         save_only_model=output_config.get("save_only_model", False),
-        
         max_seq_length=dataset_config.get("cutoff_len", 2048),
         packing=False,  
-        
         deepspeed=training_config.get("deepspeed"),
         ddp_timeout=training_config.get("ddp_timeout", 1800),
         report_to=report_to,
-        
         dataloader_pin_memory=True,
     )
     
