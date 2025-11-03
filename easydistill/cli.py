@@ -170,7 +170,7 @@ def process(job_type, config):
         if infer_success:
             cmd_train = [
                 'deepspeed',
-                os.path.join(script_dir, 'agentkd/train.py'),
+                os.path.join(script_dir, 'speckd/train.py'),
                 '--config', config
             ]
             cmd_train = ' '.join(cmd_train)
