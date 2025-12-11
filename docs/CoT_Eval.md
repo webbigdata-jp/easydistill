@@ -20,7 +20,7 @@ You can refer to the following JSON file for configuration.
     }
 }
 ```
-For reference, the formats for text and multimodal data are provided in `data/alpaca_en_demo.json` and `data/mllm_demo.json`, respectively.  
+For reference, the formats for text and multimodal data are provided in `data/alpaca_en_demo.json` and `data/mllm_demo.json`, respectively.
 
 To score text-based and multimodal chain-of-thought (CoT) data, set the `"job_type"` field to `"cot_eval_api"` or `"mmcot_eval_api"`, respectively.
 
@@ -33,5 +33,5 @@ Run your CoT data evaluation.
 ```bash
 export JUDGE_MODEL=qwen-plus
 
-easydistill --config cot_eval_api.json
+easydistill --config mmcot_eval_api.json
 ```

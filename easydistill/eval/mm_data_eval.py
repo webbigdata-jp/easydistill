@@ -107,7 +107,7 @@ def image2base64(image_path):
         mime_type = "image/gif"
     return f"data:{mime_type};base64,{base64_str}"
 
-def generate_teacher_response_api(data_list, config, is_cot_model):
+def generate_teacher_response_api(data_list, config):
     client = OpenAI(
         api_key = config["inference"]["api_key"],
         base_url = config["inference"]["base_url"]
@@ -119,12 +119,11 @@ def generate_teacher_response_api(data_list, config, is_cot_model):
     def process_single_sample(sample_with_index):
         index, sample = sample_with_index
         images = []
-        for i, item in enumerate(sample):
+        for item in sample:
             content = item.get('content')
-            role = item.get('role')
 
             if isinstance(content, list):
-                for j, content_item in enumerate(content):
+                for content_item in content:
                     if content_item.get('type') == 'image':
                         image_path = content_item.get('image')
                         if image_path:

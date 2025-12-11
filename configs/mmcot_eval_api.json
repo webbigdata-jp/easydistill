@@ -6,7 +6,7 @@
     },
     "inference":{
       "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
-      "api_key": "sk-xxxxx",
+      "api_key": "YOUR_API_KEY_HERE",
       "max_new_tokens": 8196
     }
 }
