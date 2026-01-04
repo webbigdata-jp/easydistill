@@ -1,0 +1,8 @@
+{# Qwen3 Knowledge Distillation Template (enable_thinking=false) #}
+{{- '<|im_start|>user\n' + message.content + '<|im_end|>\n' }}
+{%- if add_generation_prompt %}
+{{- '<|im_start|>assistant\n<think>\n\n</think>\n\n' }}
+{%- endif %}
+{%- if add_output %}
+{{- '<|im_start|>assistant\n<think>\n\n</think>\n\n' + message.output + '<|im_end|>' }}
+{%- endif %}

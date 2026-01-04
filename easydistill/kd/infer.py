@@ -73,8 +73,8 @@ def load_tokenizer_and_vllm(config, eos_token=None):
     try:
         tokenizer.eos_token = eos_token
         tokenizer.eos_token_id = eos_token_id
-        tokenizer.pad_token = eos_token
-        tokenizer.pad_token_id = eos_token_id
+        #tokenizer.pad_token = eos_token
+        #tokenizer.pad_token_id = eos_token_id
     except:
         logging.info(f"[WARNING] Cannot set tokenizer.eos_token")
     logging.info(f"tokenizer's eos_token: {tokenizer.eos_token}, pad_token: {tokenizer.pad_token}")

@@ -1,0 +1,11 @@
+LICENSE
+NOTICE
+README.md
+pyproject.toml
+setup.py
+easydistill/__init__.py
+easydistill/cli.py
+easydistill.egg-info/PKG-INFO
+easydistill.egg-info/SOURCES.txt
+easydistill.egg-info/dependency_links.txt
+easydistill.egg-info/top_level.txt

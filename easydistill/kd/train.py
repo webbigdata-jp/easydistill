@@ -1,4 +1,3 @@
-
 # Copyright 2024 Alibaba Group Holding Limited. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,14 +30,22 @@ import torch.nn.functional as F
 
 
 class DistillSFTTrainer(SFTTrainer):
+    """
+    Memory-efficient Knowledge Distillation Trainer.
+    
+    Instead of creating a full (batch, seq, vocab_size) tensor for teacher logits,
+    this implementation only stores Top-K indices and probabilities, significantly
+    reducing memory usage from ~600MB to ~40KB per sample (for vocab_size=152k, K=20).
+    """
 
     def __init__(
         self,
         logits_dir: str = None,  
-        teacher_vocab_size = None,  
+        teacher_vocab_size: int = None,  
         kd_ratio: float = 0.5,    
-        max_seq_length : int = 1024,
+        max_seq_length: int = 1024,
         distillation_type: str = "forward_kld",
+        top_logits_num: int = 10,  # Top-K number from config
         **kwargs
     ):
         super().__init__(**kwargs)
@@ -47,90 +54,258 @@ class DistillSFTTrainer(SFTTrainer):
         self.kd_ratio = kd_ratio
         self.max_seq_length = max_seq_length
         self.distillation_type = distillation_type
-        self.teacher_logits = []
-        with jsonlines.open(self.logits_dir) as reader:
-            for obj in reader:
-                self.teacher_logits.append(obj)
-
-
-    def _load_teacher_logits(self, batch_size: int, it: int, dp_rank: int, device: torch.device, no_model_batch: Dict):
-        start_idx = dp_rank * batch_size + batch_size * it
-        end_idx = dp_rank * batch_size + batch_size * (it + 1)
-        loaded_data = self.teacher_logits[start_idx:end_idx]
-        arr = np.zeros((batch_size, self.max_seq_length, self.teacher_vocab_size))
-        for i in range(len(loaded_data)):
-            for j in range(len(loaded_data[i])):
-                keys = np.array(list(loaded_data[i][j].keys()), dtype=int)
-                values = np.array(list(loaded_data[i][j].values()))
-                arr[i, j, keys] = values
-                
-        logits_tensor = torch.tensor(arr, dtype=torch.bfloat16, device=device)
-        return self._shift_tensor_right(logits_tensor, no_model_batch['label'], pad_value=0)
-    
-
-    def _compute_white_box_distillation_loss(self, student_logits: torch.Tensor, teacher_logits: torch.Tensor, labels: Optional[torch.Tensor]):
-        student_logits = student_logits[:, :self.max_seq_length, :]
-        teacher_probs = teacher_logits[:, :student_logits.size(1), :student_logits.size(-1)]
-        mask = (labels != -100).float() if labels is not None else torch.ones_like(student_logits[:, :, 0])
+        self.top_logits_num = top_logits_num
         
-        if self.distillation_type == "forward_kld":
-            # Forward KLD: student learns from teacher (original implementation)
-            loss = F.kl_div(
-                F.log_softmax(student_logits, dim=-1),
-                teacher_probs,
-                reduction='none',
-                log_target=False
-            ).sum(dim=-1)/torch.sum(mask.view(-1), dim=0) 
-        elif self.distillation_type == "reverse_kld":
-            # Reverse KLD: teacher provides certainty to student
-            loss = F.kl_div(
-                torch.log(teacher_probs.clamp(min=1e-10)),  # avoid log(0)
-                F.softmax(student_logits, dim=-1),
-                reduction='none',
-                log_target=False
-            ).sum(dim=-1)/torch.sum(mask.view(-1), dim=0) 
+        # Load teacher logits from JSONL file
+        self.teacher_logits = []
+        if self.logits_dir:
+            with jsonlines.open(self.logits_dir) as reader:
+                for obj in reader:
+                    self.teacher_logits.append(obj)
+            logging.info(f"Loaded {len(self.teacher_logits)} teacher logits from {self.logits_dir}")
+
+
+    def _load_teacher_logits(
+        self, 
+        batch_size: int, 
+        it: int, 
+        dp_rank: int, 
+        device: torch.device, 
+        no_model_batch: Dict
+    ) -> tuple:
+        """
+        Load teacher logits as sparse representation (indices + probabilities).
+        
+        Returns:
+            tuple: (indices_tensor, probs_tensor)
+                - indices_tensor: (batch, seq, K) - Token IDs of Top-K
+                - probs_tensor: (batch, seq, K) - Probabilities of Top-K
+        """
+        total_samples = len(self.teacher_logits)
+        
+        # Use modulo to handle multiple epochs
+        # global_step increases across epochs, so we cycle through the data
+        start_idx = (it * batch_size) % total_samples
+        end_idx = start_idx + batch_size
+        
+        # Handle wrap-around at epoch boundary
+        if end_idx <= total_samples:
+            loaded_data = self.teacher_logits[start_idx:end_idx]
         else:
-            raise ValueError(f"Unsupported distillation type: {self.distillation_type}. Use 'forward_kld' or 'reverse_kld'")
-            
-        return (loss * mask).sum() / mask.sum()
+            # Wrap around: take remaining from end + beginning
+            loaded_data = (
+                self.teacher_logits[start_idx:total_samples] + 
+                self.teacher_logits[0:end_idx - total_samples]
+            )
+        
+        # Find max sequence length in this batch
+        max_len_in_batch = max(len(sample) for sample in loaded_data) if loaded_data else 0
+        actual_seq_len = min(max_len_in_batch, self.max_seq_length)
+        
+        # Initialize tensors with padding
+        # Using 0 as padding token ID (safe for gather operation)
+        batch_indices = torch.zeros(
+            (len(loaded_data), actual_seq_len, self.top_logits_num), 
+            dtype=torch.long, 
+            device=device
+        )
+        batch_probs = torch.zeros(
+            (len(loaded_data), actual_seq_len, self.top_logits_num), 
+            dtype=torch.bfloat16, 
+            device=device
+        )
+        
+        for b_idx, sample in enumerate(loaded_data):
+            seq_len = min(len(sample), actual_seq_len)
+            for s_idx in range(seq_len):
+                logit_dict = sample[s_idx]
+                # Extract token IDs and probabilities from dict
+                ids = list(map(int, logit_dict.keys()))
+                probs = list(logit_dict.values())
+                
+                # Handle variable K (take min of actual and expected)
+                k = min(len(ids), self.top_logits_num)
+                batch_indices[b_idx, s_idx, :k] = torch.tensor(ids[:k], dtype=torch.long, device=device)
+                batch_probs[b_idx, s_idx, :k] = torch.tensor(probs[:k], dtype=torch.bfloat16, device=device)
+        
+        # Apply sequence shift (align with labels)
+        labels = no_model_batch.get('label')
+        if labels is not None:
+            indices_shifted = self._shift_tensor_right_sparse(batch_indices, labels, pad_value=0)
+            probs_shifted = self._shift_tensor_right_sparse(batch_probs, labels, pad_value=0.0)
+        else:
+            indices_shifted = batch_indices
+            probs_shifted = batch_probs
+        
+        return indices_shifted, probs_shifted
 
 
     @staticmethod
-    def _shift_tensor_right(inputs: torch.Tensor, labels: torch.Tensor, pad_value: float = 0.0):
-        batch_size, seqlen, vocab_size = inputs.shape
+    def _shift_tensor_right_sparse(
+        inputs: torch.Tensor, 
+        labels: torch.Tensor, 
+        pad_value: float = 0.0
+    ) -> torch.Tensor:
+        """
+        Shift tensor right based on label positions.
+        Works with sparse representation (batch, seq, K).
+        
+        Args:
+            inputs: (batch, seq, K) tensor to shift
+            labels: (batch, seq) labels tensor, -100 indicates padding/prompt
+            pad_value: Value to use for padding after shift
+            
+        Returns:
+            Shifted tensor of same shape
+        """
+        batch_size, seqlen, k_dim = inputs.shape
         device = inputs.device
+        
+        # Find first non-padding position in labels
         labels_ne = labels != -100
         shift_distances = torch.argmax(labels_ne.int(), dim=1)
+        
+        # Create index for gather
         idx = torch.arange(seqlen, device=device).unsqueeze(0).expand(batch_size, seqlen)
         shifted_idx = idx - shift_distances.unsqueeze(1)
         mask = shifted_idx >= 0
         shifted_idx = shifted_idx.clamp(min=0)
-        inputs_flat = inputs.view(batch_size, seqlen, vocab_size)
-        shifted_idx = shifted_idx.unsqueeze(2).expand(-1, -1, vocab_size)
-        gathered = torch.gather(inputs_flat, 1, shifted_idx)
-        mask = mask.unsqueeze(2).expand(-1, -1, vocab_size)
-        return torch.where(mask, gathered, torch.full_like(gathered, pad_value))
+        
+        # Expand for K dimension
+        shifted_idx_expanded = shifted_idx.unsqueeze(2).expand(-1, -1, k_dim)
+        
+        # Gather and apply mask
+        gathered = torch.gather(inputs, 1, shifted_idx_expanded)
+        mask_expanded = mask.unsqueeze(2).expand(-1, -1, k_dim)
+        
+        return torch.where(mask_expanded, gathered, torch.full_like(gathered, pad_value))
 
 
-    def compute_loss(self, model: PreTrainedModel, inputs: Dict[str, torch.Tensor], return_outputs=False, num_items_in_batch=None):
+    def _compute_white_box_distillation_loss(
+        self, 
+        student_logits: torch.Tensor, 
+        teacher_indices: torch.Tensor, 
+        teacher_probs: torch.Tensor, 
+        labels: Optional[torch.Tensor]
+    ) -> torch.Tensor:
+        """
+        Compute KL divergence loss using sparse teacher representation.
+        
+        This method avoids creating full (batch, seq, vocab) tensors for teacher,
+        instead using torch.gather to extract only the necessary logits.
+        
+        Args:
+            student_logits: (batch, seq, vocab) - Full student logits
+            teacher_indices: (batch, seq, K) - Top-K token indices from teacher
+            teacher_probs: (batch, seq, K) - Top-K probabilities from teacher
+            labels: (batch, seq) - Labels for masking
+            
+        Returns:
+            Scalar loss value
+        """
+        # Align sequence lengths
+        min_len = min(student_logits.size(1), teacher_indices.size(1))
+        student_logits = student_logits[:, :min_len, :]
+        teacher_indices = teacher_indices[:, :min_len, :]
+        teacher_probs = teacher_probs[:, :min_len, :]
+        
+        # Create mask from labels
+        if labels is not None:
+            mask = (labels[:, :min_len] != -100).float()
+        else:
+            mask = torch.ones(
+                (student_logits.size(0), min_len), 
+                device=student_logits.device
+            )
+        
+        # Compute student log probabilities for full vocabulary
+        student_log_probs_all = F.log_softmax(student_logits, dim=-1)
+        
+        # Extract student log probs only for teacher's Top-K tokens
+        student_log_probs_selected = torch.gather(
+            student_log_probs_all, 
+            dim=-1, 
+            index=teacher_indices
+        )
+        
+        # Teacher log probs (with numerical stability)
+        teacher_log_probs_selected = torch.log(teacher_probs.clamp(min=1e-10))
+        
+        if self.distillation_type == "forward_kld":
+            # Forward KLD: D_KL(Teacher || Student)
+            # = sum(P_teacher * log(P_teacher / P_student))
+            # = sum(P_teacher * (log(P_teacher) - log(P_student)))
+            pointwise_loss = teacher_probs * (teacher_log_probs_selected - student_log_probs_selected)
+            
+        elif self.distillation_type == "reverse_kld":
+            # Reverse KLD: D_KL(Student || Teacher)
+            # For sparse teacher (Top-K only), we compute on the Top-K support
+            # = sum(P_student_topk * (log(P_student_topk) - log(P_teacher_topk)))
+            # Note: This is an approximation since we only consider Top-K tokens
+            student_probs_selected = torch.exp(student_log_probs_selected)
+            pointwise_loss = student_probs_selected * (student_log_probs_selected - teacher_log_probs_selected)
+            
+        else:
+            raise ValueError(
+                f"Unsupported distillation type: {self.distillation_type}. "
+                "Use 'forward_kld' or 'reverse_kld'"
+            )
+        
+        # Sum over K dimension -> (batch, seq)
+        loss_per_token = pointwise_loss.sum(dim=-1)
+        
+        # Apply mask and compute mean
+        masked_loss = loss_per_token * mask
+        loss = masked_loss.sum() / (mask.sum() + 1e-10)
+        
+        return loss
+
+
+    def compute_loss(
+        self, 
+        model: PreTrainedModel, 
+        inputs: Dict[str, torch.Tensor], 
+        return_outputs: bool = False, 
+        num_items_in_batch: int = None
+    ):
+        """
+        Compute combined LM loss and distillation loss.
+        """
         outputs = model(**inputs)
         lm_loss = outputs.loss
+        
         if self.logits_dir:
-            teacher_logits = self._load_teacher_logits(
+            # Load sparse teacher logits
+            teacher_indices, teacher_probs = self._load_teacher_logits(
                 batch_size=inputs['input_ids'].size(0),
                 it=self.state.global_step,
                 dp_rank=torch.distributed.get_rank() if torch.distributed.is_initialized() else 0,
                 device=model.device,
                 no_model_batch={'label': inputs.get('labels', None)}
             )
+            
+            # Compute distillation loss
             distil_loss = self._compute_white_box_distillation_loss(
                 student_logits=outputs.logits,
-                teacher_logits=teacher_logits,
+                teacher_indices=teacher_indices,
+                teacher_probs=teacher_probs,
                 labels=inputs.get('labels', None)
             )
+            
+            # Combine losses
             total_loss = (1 - self.kd_ratio) * lm_loss + self.kd_ratio * distil_loss
+            
+            # Log losses for debugging (optional)
+            if self.state.global_step % 100 == 0:
+                logging.info(
+                    f"Step {self.state.global_step}: "
+                    f"LM Loss={lm_loss.item():.4f}, "
+                    f"Distil Loss={distil_loss.item():.4f}, "
+                    f"Total Loss={total_loss.item():.4f}"
+                )
         else:
             total_loss = lm_loss
+            
         return (total_loss, outputs) if return_outputs else total_loss
 
 
@@ -170,7 +345,7 @@ def train(config):
     training_arguments = SFTConfig(**config["training"])
     
     try:
-        job_type =  config["job_type"]
+        job_type = config["job_type"]
         if "kd_black_box" in job_type:
             dataset = dataset.shuffle(seed=config["dataset"]["seed"])
             trainer = SFTTrainer(
@@ -181,13 +356,23 @@ def train(config):
                 formatting_func=formatting_func
             )
         elif "kd_white_box" in job_type:
-            teacher_vocab_size=json.load(open(os.path.join(config["models"]["teacher"], 'config.json')))['vocab_size']
+            teacher_vocab_size = json.load(
+                open(os.path.join(config["models"]["teacher"], 'config.json'))
+            )['vocab_size']
+            
+            # Get top_logits_num from config (distillation section or inference section)
+            top_logits_num = config["distillation"].get(
+                "top_logits_num", 
+                config.get("inference", {}).get("top_logits_num", 10)
+            )
+            
             trainer = DistillSFTTrainer(
                 logits_dir=config["dataset"]["logits_path"],
                 teacher_vocab_size=teacher_vocab_size,
                 kd_ratio=config["distillation"]["kd_ratio"], 
                 max_seq_length=config["distillation"]["max_seq_length"],
                 distillation_type=config["distillation"].get("distillation_type", "forward_kld"),
+                top_logits_num=top_logits_num,
                 model=student_model,
                 processing_class=student_tokenizer,
                 args=training_arguments,
@@ -216,3 +401,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+

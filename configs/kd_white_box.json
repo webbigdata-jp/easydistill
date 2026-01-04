@@ -1,43 +1,46 @@
 {
   "job_type": "kd_white_box",
   "dataset": {
-    "instruction_path": "train.json",
-    "labeled_path": "train_labeled.json",
-    "logits_path": "./logits.json",
-    "template" : "./chat_template/chat_template_kd.jinja",
+    "instruction_path": "train_filtered.json",
+    "labeled_path": "train_labeled_with_teacher.json",
+    "logits_path": "teacher_logits.jsonl",
+    "template" : "./chat_template/chat_template_kd_qwen3.jinja",
     "seed": 42
   },
-  "inference":{
+  "inference": {
     "enable_chunked_prefill": true,
-    "seed": 777,
-    "gpu_memory_utilization": 0.9,
+    "seed": 42,
+    "gpu_memory_utilization": 0.95,
     "temperature": 0.8,
     "trust_remote_code": true,
-    "enforce_eager": false,
-    "max_model_len": 4096,
+    "enforce_eager": true,
+    "max_model_len": 1024,
     "max_new_tokens": 512,
-    "top_logits_num": 10
+    "top_logits_num": 20
   },
   "distillation": {
-    "kd_ratio": 0.1,
+    "kd_ratio": 0.5,
     "max_seq_length": 512,
-    "distillation_type": "forward_kld"
+    "distillation_type": "reverse_kld",
+    "top_logits_num": 20,
+    "dtype": "bfloat16"
   },
   "models": {
-    "teacher": "teacher/Qwen/Qwen2.5-7B-Instruct/",
-    "student": "student/Qwen/Qwen2.5-0.5B-Instruct/"
+    "teacher": "shisa-ai/shisa-v2.1-qwen3-8b",
+    "student": "unsloth/Qwen3-0.6B"
   },
   "training": {
-    "output_dir": "./result/",
-    "num_train_epochs": 3,
-    "per_device_train_batch_size": 1,
-    "gradient_accumulation_steps": 8,
-    "max_length":512,
+    "output_dir": "./result_stages/",
+    "num_train_epochs": 1,
+    "per_device_train_batch_size": 2,
+    "gradient_accumulation_steps": 4,
+    "max_length": 1024,
     "save_steps": 1000,
-    "logging_steps": 1,
+    "logging_steps": 10,
     "learning_rate": 2e-5,
     "weight_decay": 0.05,
     "warmup_ratio": 0.1,
-    "lr_scheduler_type": "cosine"
+    "lr_scheduler_type": "cosine",
+    "bf16": true
   }
 }
