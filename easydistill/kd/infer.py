@@ -59,7 +59,7 @@ def write_data_to_json_file(data, file_path):
 def load_tokenizer_and_vllm(config, eos_token=None):
     teacher_model_path = config["models"]["teacher"]
     logging.info(f"Loading ckpt and tokenizer: {teacher_model_path}")
-    tokenizer = AutoTokenizer.from_pretrained(teacher_model_path, trust_remote_code=True)
+    tokenizer = AutoTokenizer.from_pretrained(teacher_model_path, fix_mistral_regex=True)
     tokenizer.padding_side = "left"
     if eos_token:
         eos_token_id = tokenizer.convert_tokens_to_ids(eos_token)

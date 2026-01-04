@@ -13,29 +13,29 @@
     "gpu_memory_utilization": 0.95,
     "temperature": 0.8,
     "trust_remote_code": true,
-    "enforce_eager": true,
-    "max_model_len": 1024,
-    "max_new_tokens": 512,
+    "enforce_eager": false,
+    "max_model_len": 4096,
+    "max_new_tokens": 1024,
     "top_logits_num": 20
   },
   "distillation": {
     "kd_ratio": 0.5,
-    "max_seq_length": 512,
+    "max_seq_length": 4096,
     "distillation_type": "reverse_kld",
     "top_logits_num": 20,
     "dtype": "bfloat16"
   },
   "models": {
     "teacher": "shisa-ai/shisa-v2.1-qwen3-8b",
-    "student": "unsloth/Qwen3-0.6B"
+    "student": "result_qwen3_kd_black"
   },
   "training": {
-    "output_dir": "./result_stages/",
+    "output_dir": "./result_qwen3_kd_white",
     "num_train_epochs": 1,
     "per_device_train_batch_size": 2,
     "gradient_accumulation_steps": 4,
-    "max_length": 1024,
-    "save_steps": 1000,
+    "max_length": 4096,
+    "save_steps": 5000,
     "logging_steps": 10,
     "learning_rate": 2e-5,
     "weight_decay": 0.05,

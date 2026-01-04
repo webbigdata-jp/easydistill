@@ -29,6 +29,13 @@ import numpy as np
 import torch.nn.functional as F
 
 
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
+
 class DistillSFTTrainer(SFTTrainer):
     """
     Memory-efficient Knowledge Distillation Trainer.
@@ -329,11 +336,10 @@ def train(config):
     
     student_tokenizer = AutoTokenizer.from_pretrained(
         config["models"]["student"], 
-        trust_remote_code=True
+        fix_mistral_regex=True
     )
     student_model = AutoModelForCausalLM.from_pretrained(
         config["models"]["student"],
-        trust_remote_code=True
     )
 
     global template
