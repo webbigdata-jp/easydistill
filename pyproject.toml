@@ -8,3 +8,5 @@ dependencies = [
     "transformers>=4.57.3",
     "vllm>=0.13.0",
 ]
+[project.scripts]
+easydistill = "easydistill.cli:main"
