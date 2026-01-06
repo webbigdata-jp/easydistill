@@ -42,9 +42,9 @@ def run_cmd(cmd):
         error_keywords = [
             "ERROR",
             "Error",
-            "error"
+            "error",
             "Unrecognized model",
-            "failed",
+            # "failed", beacause of "0 failed" output.
             "exception",
             "Traceback"
         ]
